@@ -27,9 +27,9 @@ def main():
 	parser.add_argument("--improve", action="store_true", help="use Real ESRGAN to improve the video")
 	parser.add_argument("--skipgen", action="store_true", help="improve the video only")
 	parser.add_argument("--path_id", default=str(int(time.time())), help="set the path id to use")
-	parser.add_argument("--message_file", default=messagefile, help="path to the file containing the speech message")
+	parser.add_argument("--message_file",  help="path to the file containing the speech message")
 	parser.add_argument("--speech", default=audiofile, help="path to WAV speech file")
-	parser.add_argument("--image_prompt", default=promptfile, help="path to the file containing the image message")
+	parser.add_argument("--image_prompt",  help="path to the file containing the image message")
 	parser.add_argument("--image", default=imgfile, help="path to avatar file")
 
 	args = parser.parse_args()
@@ -43,12 +43,17 @@ def main():
 	outfile = os.path.join("results", path_id + "_small.mp4")
 	finalfile = os.path.join("results", path_id + "_large.mp4")
  
- # Read the message from the specified file
-	message = read_message_from_file(args.message_file)
-	 
- # Read the prompt from the specified file
-	prompt = read_prompt_from_file(args.image_prompt)
- 
+	# Initialize variables
+	message = None
+	prompt = None
+
+	# Conditionally read the message file
+	if args.message_file:
+		message = read_message_from_file(args.message_file)
+
+	# Conditionally read the prompt file
+	if args.image_prompt:
+		prompt = read_prompt_from_file(args.image_prompt)
  
 
 # Read the message from the specified file
