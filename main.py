@@ -28,7 +28,9 @@ def main():
 	parser.add_argument("--skipgen", action="store_true", help="improve the video only")
 	parser.add_argument("--path_id", default=str(int(time.time())), help="set the path id to use")
 	parser.add_argument("--message_file",  help="path to the file containing the speech message")
-	parser.add_argument("--speech", default=audiofile, help="path to WAV speech file")
+	parser.add_argument("--voice", default=tts_input, help="path to speaker voice file")
+	parser.add_argument("--lang",  help="select the language for speaker voice")
+	# parser.add_argument("--speech", default=audiofile, help="path to WAV speech file")
 	parser.add_argument("--image_prompt",  help="path to the file containing the image message")
 	parser.add_argument("--image", default=imgfile, help="path to avatar file")
 
@@ -54,7 +56,9 @@ def main():
 	# Conditionally read the prompt file
 	if args.image_prompt:
 		prompt = read_prompt_from_file(args.image_prompt)
- 
+  
+	input_voice = args.voice
+	input_lang = args.lang
 
 # Read the message from the specified file
 	if not args.skipgen:
@@ -64,9 +68,10 @@ def main():
 			print("-----------------------------------------")
 			print("generating speech")
 			t0 = time.time()
-			generate_speech(path_id, audiofile, "daniel", message, "standard")
-			tspeech = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t0)))
-			print("\ngenerating speech:", tspeech)
+			generate_speech(path_id,message,tts_output,input_voice, input_lang)
+   			# generate_speech(path_id, audiofile, "daniel", message, "standard")
+			# tspeech = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t0)))
+			print("\ngenerating speech:", tts_output)
 		else:
 			print("using:", args.speech)
 			shutil.copyfile(args.speech, os.path.join("temp", path_id, audiofile))
@@ -94,7 +99,7 @@ def main():
 		t2 = time.time()	
 		# audiofile determines the length of the driver movie to trim
 		# driver movie is imposed on the image file to produce the animated file
-		animate_face(path_id, audiofile, driverfile, imgfile, animatedfile)
+		animate_face(path_id, tts_output, driverfile, imgfile, animatedfile)
 		tanimate = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t2)))
 		print("\nanimating face:", tanimate)
 
@@ -105,7 +110,7 @@ def main():
 		t3 = time.time()
 		os.makedirs("results", exist_ok=True)
 		
-		modify_lips(path_id, audiofile, animatedfile, outfile)
+		modify_lips(path_id, tts_output, animatedfile, outfile)
 		tlips = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t3)))
 		print("\nmodifying lips:", tlips)
 
@@ -125,7 +130,7 @@ def main():
 		print("-----------------------------------------")
 		print("restoring frames")
 		
-		restore_frames(os.path.join(path, audiofile), finalfile, os.path.join(path, "improve", "improved"))		
+		restore_frames(os.path.join(path, tts_output), finalfile, os.path.join(path, "improve", "improved"))		
 		timprove = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t4)))
 		print("\nimproving video:", timprove)
 	

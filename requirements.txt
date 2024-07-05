@@ -31,3 +31,4 @@ einops
 rotary_embedding_torch
 inflect
 unidecode
+TTS

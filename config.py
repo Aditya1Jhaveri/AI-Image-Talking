@@ -4,6 +4,8 @@ import os
 
 path_id = ""
 checkpoint_path="wav2lip/models/wav2lip_gan.pth"
+tts_input="input.mp3"
+tts_output="output.wav"
 outfile="out.mp4"
 # messagefile ="message.txt"
 audiofile="tmp.wav"
