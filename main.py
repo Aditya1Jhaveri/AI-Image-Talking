@@ -44,10 +44,10 @@ def main():
 	finalfile = os.path.join("results", path_id + "_large.mp4")
  
  # Read the message from the specified file
-	message = read_message_from_file(args.messagefile)
+	message = read_message_from_file(args.message_file)
 	 
  # Read the prompt from the specified file
-	prompt = read_prompt_from_file(args.promptfile)
+	prompt = read_prompt_from_file(args.image_prompt)
  
  
 
