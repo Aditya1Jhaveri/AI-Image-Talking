@@ -64,17 +64,17 @@ def main():
 	if not args.skipgen:
 		## GENERATE SPEECH
 		tspeech = "None"
-		if args.speech == audiofile:
-			print("-----------------------------------------")
-			print("generating speech")
-			t0 = time.time()
-			generate_speech(path_id,message,tts_output,input_voice, input_lang)
+		# if args.speech == audiofile:
+		print("-----------------------------------------")
+		print("generating speech")
+		t0 = time.time()
+		generate_speech(path_id, tts_output, message,input_voice, input_lang)
    			# generate_speech(path_id, audiofile, "daniel", message, "standard")
 			# tspeech = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t0)))
-			print("\ngenerating speech:", tts_output)
-		else:
-			print("using:", args.speech)
-			shutil.copyfile(args.speech, os.path.join("temp", path_id, audiofile))
+		print("\ngenerating speech:", tts_output)
+		# else:
+		# 	print("using:", args.speech)
+		# 	shutil.copyfile(args.speech, os.path.join("temp", path_id, audiofile))
 
 ##Generate the Avatar image if it's not provided
 

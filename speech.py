@@ -62,6 +62,8 @@ import os
 import torch
 from TTS.api import TTS
 import time
+import humanize
+import datetime as dt
 
 # Get device
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -69,25 +71,44 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # Init TTS
 tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
-def generate_speech(path_id,text, outfile, speaker_wav=None, language="en"):
-    # Generate speech and save to a file
-    tts.tts_to_file(text=text, file_path=os.path.join(path_id, outfile), speaker_wav=speaker_wav, language=language)
-
-if __name__ == '__main__':
-    path_id = os.path.join("temp", "audio", str(int(time.time())))
+def generate_speech(path_id, outfile, text, speaker_wav=None, language="en"):
+    # Ensure the directory exists
     os.makedirs(path_id, exist_ok=True)
     
-    message = """The power of kindness is a profound force that transcends boundaries and transforms lives. 
-    It emanates from genuine empathy, compassion, and selflessness, radiating warmth and understanding even in adversity. 
-    Kindness can bridge divides, mend wounds, and uplift spirits, fostering a sense of belonging and connection in our shared human experience. 
-    It acts as a catalyst for positive change, inspiring others to pay it forward and creating a ripple effect of goodwill and generosity. 
-    Whether through simple acts of courtesy or grand gestures of generosity, kindness can heal, unite, and bring light to the darkest corners of our world, 
-    reminding us of the inherent goodness within each of us and the potential to make a difference, one compassionate deed at a time."""
+    # Generate the full path for the output file
+    output_path = os.path.join(path_id, outfile)
+    
+    # Generate speech and save to a file
+    tts.tts_to_file(text=text, file_path=output_path, speaker_wav=speaker_wav, language=language)
+    
+    return output_path
+
+def main():
+    # Create a unique path based on the current timestamp
+    path_id = os.path.join("temp", str(int(time.time())))
+    os.makedirs(path_id, exist_ok=True)
+    
+    print(f"path_id: {path_id} path: {os.path.abspath(path_id)}")
+    
+    message = """Reading offers numerous benefits beyond simple entertainment, encompassing cognitive, emotional, and social dimensions. 
+    It acts as a mental workout, sharpening critical thinking, concentration, and analytical skills while expanding vocabulary and knowledge. 
+    Additionally, it fosters empathy and emotional intelligence by allowing readers to inhabit different perspectives and experiences. 
+    Reading is a gateway to diverse cultures, histories, and ideas, promoting open-mindedness and cultural understanding. 
+    Moreover, it provides relaxation and stress reduction, offering an escape from daily pressures. 
+    Furthermore, it can enhance communication skills and creativity, sparking imagination and innovation. 
+    Ultimately, reading is a lifelong pursuit that enriches individuals’ lives intellectually, emotionally, and socially."""
 
     speaker_wav = "/content/drive/MyDrive/Y2meta.app - Trump Makes CPAC Crowd Laugh Doing Mean Impression Of Biden Trying To Get Off Stage (256 kbps).mp3"
     outfile = "output.wav"
     language = "en"
     
-    generate_speech(path_id, message, outfile, speaker_wav=speaker_wav, language=language)
-    
-    print(f"Speech saved to {os.path.join(path_id, outfile)}")
+    try:
+        output_path = generate_speech(path_id, outfile, message, speaker_wav=speaker_wav, language=language)
+        print(f"Speech saved to {output_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == '__main__':
+    start = time.time()
+    main()
+    print("total time:", humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - start))))
