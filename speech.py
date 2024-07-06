@@ -76,7 +76,7 @@ def generate_speech(path_id, outfile, text, speaker_wav=None, language="en"):
     os.makedirs(path_id, exist_ok=True)
     
     # Generate the full path for the output file
-    output_path = os.path.join(path_id, outfile)
+    output_path = os.path.join("temp",path_id, outfile)
     
     # Generate speech and save to a file
     tts.tts_to_file(text=text, file_path=output_path, speaker_wav=speaker_wav, language=language)

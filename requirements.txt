@@ -31,4 +31,3 @@ einops
 rotary_embedding_torch
 inflect
 unidecode
--U TTS
