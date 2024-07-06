@@ -25,7 +25,7 @@ def main():
 		# Parse the arguments
 	parser = ArgumentParser()
 	parser.add_argument("--improve", action="store_true", help="use Real ESRGAN to improve the video")
-	# parser.add_argument("--skipgen", action="store_true", help="improve the video only")
+	parser.add_argument("--skipgen", action="store_true", help="improve the video only")
 	parser.add_argument("--path_id", default=str(int(time.time())), help="set the path id to use")
 	parser.add_argument("--message_file",default=str, type=str,  help="path to the file containing the speech message")
 	parser.add_argument("--voice", default=tts_input, type=str, help="path to speaker voice file")
@@ -61,20 +61,21 @@ def main():
 	input_lang = args.lang
 
 # Read the message from the specified file
-	if args.message_file and args.voice and args.lang:
+	if not args.skipgen:
+		if args.message_file and args.voice and args.lang:
 		## GENERATE SPEECH
-		tspeech = "None"
+			tspeech = "None"
 		# if args.speech == audiofile:
-		print("-----------------------------------------")
-		print("generating speech")
-		t0 = time.time()
-		generate_speech(path_id, tts_output, message,input_voice, input_lang)
+			print("-----------------------------------------")
+			print("generating speech")
+			t0 = time.time()
+			generate_speech(path_id, tts_output, message,input_voice, input_lang)
    			# generate_speech(path_id, audiofile, "daniel", message, "standard")
-		tspeech = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t0)))
-		print("\ngenerating speech:", tts_output,tspeech)
-	else:
-		print("using:", args.speech)
-		shutil.copyfile(args.speech, os.path.join("temp", path_id, audiofile))
+			tspeech = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t0)))
+			print("\ngenerating speech:", tts_output,"in",tspeech)
+		else:
+			print("using:", args.speech)
+			shutil.copyfile(args.speech, os.path.join("temp", path_id, audiofile))
 
 ##Generate the Avatar image if it's not provided
 
