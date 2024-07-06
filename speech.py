@@ -72,9 +72,6 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
 
 def generate_speech(path_id, outfile, text, speaker_wav=None, language="en"):
-    # Ensure the directory exists
-    os.makedirs(path_id, exist_ok=True)
-    
     # Generate the full path for the output file
     output_path = os.path.join("temp",path_id, outfile)
     
