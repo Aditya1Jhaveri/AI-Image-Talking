@@ -5,8 +5,8 @@ import humanize
 import datetime as dt
 
 def generate_image(path_id, imgfile, prompt):
-	pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo")
-	image = pipe(prompt=prompt, num_inference_steps=4, guidance_scale=0.0).images[0]
+	pipe = AutoPipelineForText2Image.from_pretrained("stabilityai/sdxl-turbo").to("cuda")
+	image = pipe(prompt=prompt).images[0]
 	image.save(os.path.join("temp", path_id, imgfile))
 
 def generate_images(path_id, imgfile, prompt, times=1):
