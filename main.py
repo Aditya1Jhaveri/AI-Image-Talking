@@ -20,7 +20,6 @@ from animate_face import animate_face
 # 2017, when its current Apple Park headquarters opened a few miles away."""
 
 
-
 def main():
 		# Parse the arguments
 	parser = ArgumentParser()
@@ -65,12 +64,10 @@ def main():
 		if args.message_file and args.voice and args.lang:
 		## GENERATE SPEECH
 			tspeech = "None"
-		# if args.speech == audiofile:
 			print("-----------------------------------------")
 			print("generating speech")
 			t0 = time.time()
 			generate_speech(path_id, tts_output, message,input_voice, input_lang)
-   			# generate_speech(path_id, audiofile, "daniel", message, "standard")
 			tspeech = humanize.naturaldelta(dt.timedelta(seconds=int(time.time() - t0)))
 			print("\ngenerating speech:", tts_output,"in",tspeech)
 		else:
