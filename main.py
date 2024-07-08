@@ -48,13 +48,13 @@ def main():
 	message = None
 	prompt = None
 
-	# Conditionally read the message file
-	if args.message_file:
-		message = read_message_from_file(args.message_file)
+	# # Conditionally read the message file
+	# if args.message_file:
+	# 	message = read_message_from_file(args.message_file)
 
-	# Conditionally read the prompt file
-	if args.image_prompt:
-		prompt = read_prompt_from_file(args.image_prompt)
+	# # Conditionally read the prompt file
+	# if args.image_prompt:
+	# 	prompt = read_prompt_from_file(args.image_prompt)
   
 	input_voice = args.voice
 	input_lang = args.lang
@@ -62,6 +62,8 @@ def main():
 # Read the message from the specified file
 	if not args.skipgen:
 		if args.message_file and args.voice and args.lang:
+      
+			message = read_message_from_file(args.message_file)
 		## GENERATE SPEECH
 			tspeech = "None"
 			print("-----------------------------------------")
@@ -79,6 +81,7 @@ def main():
 		## GENERATE AVATAR IMAGE
 		timage = "None"
 		if args.image == imgfile:
+			prompt = read_prompt_from_file(args.image_prompt)
 			print("-----------------------------------------")
 			print("generating avatar image")
 			t1 = time.time()
