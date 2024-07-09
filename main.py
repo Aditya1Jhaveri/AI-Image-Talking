@@ -26,9 +26,9 @@ def main():
 	parser.add_argument("--improve", action="store_true", help="use Real ESRGAN to improve the video")
 	parser.add_argument("--skipgen", action="store_true", help="improve the video only")
 	parser.add_argument("--path_id", default=str(int(time.time())), help="set the path id to use")
-	parser.add_argument("--message_file",default=str, type=str,  help="path to the file containing the speech message")
-	parser.add_argument("--voice", default=tts_input, type=str, help="path to speaker voice file")
-	parser.add_argument("--lang", default=str, type=str, help="select the language for speaker voice")
+	parser.add_argument("--message_file", type=str,  help="path to the file containing the speech message")
+	parser.add_argument("--voice", type=str, help="path to speaker voice file")
+	parser.add_argument("--lang",  type=str, help="select the language for speaker voice")
 	parser.add_argument("--speech",  help="path to WAV speech file")
 	parser.add_argument("--image_prompt",  help="path to the file containing the image message")
 	parser.add_argument("--image", default=imgfile, help="path to avatar file")
@@ -48,13 +48,13 @@ def main():
 	message = None
 	prompt = None
 
-	# # Conditionally read the message file
-	# if args.message_file:
-	# 	message = read_message_from_file(args.message_file)
+	# Conditionally read the message file
+	if args.message_file:
+		message = read_message_from_file(args.message_file)
 
-	# # Conditionally read the prompt file
-	# if args.image_prompt:
-	# 	prompt = read_prompt_from_file(args.image_prompt)
+	# Conditionally read the prompt file
+	if args.image_prompt:
+		prompt = read_prompt_from_file(args.image_prompt)
   
 	input_voice = args.voice
 	input_lang = args.lang
@@ -63,7 +63,6 @@ def main():
 	if not args.skipgen:
 		if args.message_file and args.voice and args.lang:
       
-			message = read_message_from_file(args.message_file)
 		## GENERATE SPEECH
 			tspeech = "None"
 			print("-----------------------------------------")
@@ -81,7 +80,7 @@ def main():
 		## GENERATE AVATAR IMAGE
 		timage = "None"
 		if args.image == imgfile:
-			prompt = read_prompt_from_file(args.image_prompt)
+
 			print("-----------------------------------------")
 			print("generating avatar image")
 			t1 = time.time()
