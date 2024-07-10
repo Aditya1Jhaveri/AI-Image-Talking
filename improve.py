@@ -18,7 +18,7 @@ import time
 from basicsr.archs.rrdbnet_arch import RRDBNet
 # from realesrgan import RealESRGANer
 from gfpgan import GFPGANer
-
+from tqdm import tqdm
 
 def vid2frames(vidPath, framesOutPath):
     print(vidPath)
@@ -48,7 +48,7 @@ def get_audio_duration(audioPath):
 def count_files(directory):
     return len([name for name in os.listdir(directory) if os.path.isfile(os.path.join(directory, name))])
 
-def process(img_path, improveOutputPath):
+def process(img_path, improveOutputPath, pbar):
     only_center_face = True
     aligned = True
     weight = 0.5
@@ -104,7 +104,6 @@ def process(img_path, improveOutputPath):
         save_restore_path = os.path.join(improveOutputPath, 'restored_imgs', f'{basename}.{extension}')
         cv2.imwrite(save_restore_path, restored_img)
 
-    print(f'Processed {img_name} ...')
 
 def improve(improveInputPath, improveOutputPath):
     if improveInputPath.endswith('/'):
@@ -120,9 +119,7 @@ def improve(improveInputPath, improveOutputPath):
     os.makedirs(os.path.join(improveOutputPath, 'restored_imgs'), exist_ok=True)
 
     with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(process, img, improveOutputPath) for img in img_list]
-        for future in futures:
-            future.result()
+        list(tqdm(executor.map(lambda img: process(img, improveOutputPath), img_list), total=len(img_list), desc="Processing images"))
 
     print("All images processed.")
 
