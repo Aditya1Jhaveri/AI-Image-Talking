@@ -59,6 +59,8 @@ def main():
 	input_voice = args.voice
 	input_lang = args.lang
 
+##Generate the speech from text input and learn the voice from input_voice
+
 # Read the message from the specified file
 	if not args.skipgen:
 		if args.message_file and args.voice and args.lang:

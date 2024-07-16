@@ -1,4 +1,3 @@
-
 from config import *
 import cv2
 import glob
@@ -16,7 +15,7 @@ from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
 import time
 from basicsr.archs.rrdbnet_arch import RRDBNet
-# from realesrgan import RealESRGANer
+# from RealESRGAN import RealESRGAN
 from gfpgan import GFPGANer
 from tqdm import tqdm
 
@@ -48,7 +47,9 @@ def get_audio_duration(audioPath):
 def count_files(directory):
     return len([name for name in os.listdir(directory) if os.path.isfile(os.path.join(directory, name))])
 
-def process(img_path, improveOutputPath, pbar):
+
+############# GFPGAN Model 
+def process(img_path, improveOutputPath):
     only_center_face = True
     aligned = True
     weight = 0.5
@@ -58,7 +59,7 @@ def process(img_path, improveOutputPath, pbar):
     model_name = 'GFPGANv1.4'
     url = 'https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth'
 
-    # Determine model paths
+   # Determine model paths
     model_path = os.path.join('gfpgan_models', model_name + '.pth')
     if not os.path.isfile(model_path):
         model_path = os.path.join('gfpgan/weights', model_name + '.pth')
@@ -104,7 +105,6 @@ def process(img_path, improveOutputPath, pbar):
         save_restore_path = os.path.join(improveOutputPath, 'restored_imgs', f'{basename}.{extension}')
         cv2.imwrite(save_restore_path, restored_img)
 
-
 def improve(improveInputPath, improveOutputPath):
     if improveInputPath.endswith('/'):
         improveInputPath = improveInputPath[:-1]
@@ -122,6 +122,25 @@ def improve(improveInputPath, improveOutputPath):
         list(tqdm(executor.map(lambda img: process(img, improveOutputPath), img_list), total=len(img_list), desc="Processing images"))
 
     print("All images processed.")
+    
+######### REAL-ESRGAN MODEL     
+
+# def improve(disassembledPath, improvedPath):
+#     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+#     model = RealESRGAN(device, scale=4)
+#     model.load_weights('weights/RealESRGAN_x4.pth', download=True)
+
+#     files = glob.glob(os.path.join(disassembledPath,"*.png"))
+    
+#     # pool = ParallelPool(nodes=20)    
+#     # results = pool.amap(real_esrgan, files, [model]*len(files), [improvedPath] * len(files))
+#     results = t_map(real_esrgan, files, [model]*len(files), [improvedPath] * len(files))
+
+# def real_esrgan(img_path, model, improvedPath):
+#     image = Image.open(img_path).convert('RGB')
+#     sr_image = model.predict(image)
+#     img_name = os.path.basename(img_path)
+#     sr_image.save(os.path.join(improvedPath, img_name))	
 
 # Example usage:
 # improve('input_folder_path', 'output_folder_path')
